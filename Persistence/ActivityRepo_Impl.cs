@@ -14,25 +14,25 @@ public class ActivityRepo_Impl : IActivityRepo
     }
 
 
-    public async Task<IEnumerable<Activity>> GetActivitiesAsync()
+    public async Task<IEnumerable<Activity>> GetActivitiesAsync(CancellationToken ct)
     {
         var activities = await _context.Activities
         .AsNoTracking()
-        .ToListAsync();
+        .ToListAsync(ct);
         return activities;
     }
 
-    public async Task<Activity> GetActivityAsync(Guid id)
+    public async Task<Activity> GetActivityAsync(Guid id, CancellationToken ct)
     {
         
-        var activity = await _context.Activities.FindAsync(id);
+        var activity = await _context.Activities.FindAsync(id, ct);
         return activity!;
     }
 
-    public async Task<Activity> CreateActivity(Activity activity)
+    public async Task<Activity> CreateActivity(Activity activity, CancellationToken ct)
     {
         _context.Activities.Add(activity);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
         return activity;
     }
 

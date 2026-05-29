@@ -13,3 +13,4 @@ C:\Users\EthanWilson\Git_Repos\EventManagementApp\Persistence\obj\Debug\net10.0\
 C:\Users\EthanWilson\Git_Repos\EventManagementApp\Persistence\obj\Debug\net10.0\refint\Persistence.dll
 C:\Users\EthanWilson\Git_Repos\EventManagementApp\Persistence\obj\Debug\net10.0\Persistence.pdb
 C:\Users\EthanWilson\Git_Repos\EventManagementApp\Persistence\obj\Debug\net10.0\ref\Persistence.dll
+C:\Users\EthanWilson\Git_Repos\EventManagementApp\Persistence\obj\Debug\net10.0\Persistence.sourcelink.json

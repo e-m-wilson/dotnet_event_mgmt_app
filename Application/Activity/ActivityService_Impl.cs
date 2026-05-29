@@ -17,38 +17,38 @@ public class ActivityService_Impl : IActivityService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ReadActivityDto>> GetActivitiesAsync()
-    {
+    // public async Task<IEnumerable<ReadActivityDto>> GetActivitiesAsync()
+    // {
 
-        var activities = await _repo.GetActivitiesAsync();
+    //     var activities = await _repo.GetActivitiesAsync();
 
-        var mappedActivities = activities
-            .Select(a => _mapper.Map<ReadActivityDto>(a))
-            .ToList();
+    //     var mappedActivities = activities
+    //         .Select(a => _mapper.Map<ReadActivityDto>(a))
+    //         .ToList();
 
 
-        return mappedActivities;
-    }
+    //     return mappedActivities;
+    // }
 
-    public async Task<FullActivityDto?> GetActivityAsync(Guid id)
-    {
+    // public async Task<FullActivityDto?> GetActivityAsync(Guid id)
+    // {
 
-        var activity = await _repo.GetActivityAsync(id);
+    //     var activity = await _repo.GetActivityAsync(id);
 
-        if (activity == null)
-            return null;
+    //     if (activity == null)
+    //         return null;
 
-        var mappedActivity = _mapper.Map<FullActivityDto>(activity);
+    //     var mappedActivity = _mapper.Map<FullActivityDto>(activity);
 
-        return mappedActivity;
-    }
+    //     return mappedActivity;
+    // }
 
-    public async Task<ReadActivityDto> CreateActivity(CreateActivityDto dto)
-    {
-        var entity = _mapper.Map<Activity>(dto);
-        var created = await _repo.CreateActivity(entity);
-        return _mapper.Map<ReadActivityDto>(created);
-    }
+    // public async Task<ReadActivityDto> CreateActivity(CreateActivityDto dto)
+    // {
+    //     var entity = _mapper.Map<Activity>(dto);
+    //     var created = await _repo.CreateActivity(entity);
+    //     return _mapper.Map<ReadActivityDto>(created);
+    // }
 
     public async Task DeleteActivity(Guid id)
     {

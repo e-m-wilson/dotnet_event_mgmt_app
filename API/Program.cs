@@ -22,6 +22,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICommentRepo, CommentRepo>();
 // builder.Services.AddScoped<IActivityMapper, ActivityMapper>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -33,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://127.0.0.1:5500")
+        policy.WithOrigins("https://localhost:3000")
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
@@ -48,17 +49,19 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
 
-// app.UseRouting();
-app.UseAuthorization();
+app.UseHttpsRedirection();
 
+app.UseRouting();
+
+// this should come before UseAuthorization and UseAuthentication
 app.UseCors("AllowFrontend");
+
+app.UseAuthorization();
 
 app.MapControllers();
 

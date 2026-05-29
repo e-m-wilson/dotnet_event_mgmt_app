@@ -15,3 +15,4 @@ C:\Users\EthanWilson\Git_Repos\EventManagementApp\Application\obj\Debug\net10.0\
 C:\Users\EthanWilson\Git_Repos\EventManagementApp\Application\obj\Debug\net10.0\refint\Application.dll
 C:\Users\EthanWilson\Git_Repos\EventManagementApp\Application\obj\Debug\net10.0\Application.pdb
 C:\Users\EthanWilson\Git_Repos\EventManagementApp\Application\obj\Debug\net10.0\ref\Application.dll
+C:\Users\EthanWilson\Git_Repos\EventManagementApp\Application\obj\Debug\net10.0\Application.sourcelink.json

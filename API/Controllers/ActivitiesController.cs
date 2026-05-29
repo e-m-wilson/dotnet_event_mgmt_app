@@ -1,24 +1,30 @@
 using Application;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ActivitiesController : BaseApiController
+    
+    public class ActivitiesController : BaseApiController<ActivitiesController>
     {
         
         private readonly IActivityService _activityservice;
-        public ActivitiesController(IActivityService service)
+        
+        public ActivitiesController(
+            IActivityService service,
+            ILogger<ActivitiesController> logger,
+            IMediator mediator
+            ) : base(logger, mediator)
         {
             _activityservice = service;
         }
 
      
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReadActivityDto>>> GetActivities()
+        public async Task<ActionResult<IEnumerable<ReadActivityDto>>> GetActivities(CancellationToken ct)
         {
-           var activities = await _activityservice.GetActivitiesAsync();
+           Logger.LogInformation("Request to get all activities"); 
+           var activities = await Mediator.Send(new GetActivityList.Query(), ct);
            if (!activities.Any())
             {
                 return NotFound();
@@ -29,9 +35,9 @@ namespace API.Controllers
 
         
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<FullActivityDto>> GetActivityById(Guid id)
+        public async Task<ActionResult<FullActivityDto>> GetActivityById(Guid id, CancellationToken ct)
         {
-            var activity = await _activityservice.GetActivityAsync(id);
+            var activity = await Mediator.Send(new GetActivityDetails.Query{Id = id}, ct);
 
             if(activity == null)
             {
@@ -42,17 +48,23 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReadActivityDto>> CreateActivity(CreateActivityDto dto)
+        public async Task<ActionResult<ReadActivityDto>> CreateActivity(CreateActivityDto dto, CancellationToken ct)
         {
-            var created = await _activityservice.CreateActivity(dto);
-
+            Logger.LogInformation("Create activity called for: {ActivityTitle}", dto.Title);
+            var createdActivity = await Mediator.Send(new CreateActivity.Command{Activity = dto}, ct);
+            Logger.LogInformation("Created activity with ID: {ActivityId}", createdActivity.Id);
             //return Created("Activity created", activity);
-            return CreatedAtAction(nameof(GetActivityById), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(GetActivityById), new { id = createdActivity.Id }, createdActivity);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> EditActivity(FullActivityDto activity)
+        public async Task<IActionResult> EditActivity(Guid id, FullActivityDto activity)
         {
+            if (id != activity.Id)
+            {
+                return BadRequest("Route id does not match payload id.");    
+            }
+
             await _activityservice.EditActivity(activity);
             return NoContent();
         }

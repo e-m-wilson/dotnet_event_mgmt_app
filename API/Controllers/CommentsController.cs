@@ -1,5 +1,6 @@
 using Application;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +8,16 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommentsController : BaseApiController
+    public class CommentsController : BaseApiController<CommentsController>
     {
 
         private ICommentService _svc;
 
-        public CommentsController(ICommentService svc)
+        public CommentsController(
+            ICommentService svc,
+            ILogger<CommentsController> logger,
+            IMediator mediator
+            ) : base(logger, mediator)
         {
             _svc = svc;
         }
