@@ -2,17 +2,14 @@ import { Button, Checkbox, FormControlLabel, Stack, TextField, Typography } from
 import React from 'react'
 import type { Activity } from '../../types';
 import { useActivities } from './useActivities';
-
-type Props = {
-  a?: Activity;
-  mode: string;
-  setEditModeOff: () => void;
-}
+import { NavLink, useNavigate, useParams } from 'react-router';
 
 
-function ActivityForm({a, mode, setEditModeOff}: Props) {
+function ActivityForm() {
 
-  const {createActivity, updateActivity, activity, isLoadingActivity} = useActivities(a?.id);
+  const navigate = useNavigate();
+  const {id} = useParams();
+  const {createActivity, updateActivity, activity, isLoadingActivity} = useActivities(id);
 
   async function handleSubmit(event: React.SubmitEvent){
     event.preventDefault();
@@ -30,9 +27,16 @@ function ActivityForm({a, mode, setEditModeOff}: Props) {
     if(activity) {
       data.id = activity.id;
       await updateActivity.mutateAsync(data as unknown as Activity);
-      setEditModeOff();
+      navigate(`/activities/${activity.id}`)
     } else {
-      createActivity.mutateAsync(data as unknown as Activity);
+      createActivity.mutate(data as unknown as Activity, {
+        onSuccess: (activity) => {
+            navigate(`/activities/${activity.id}`)
+        }
+      });
+
+
+    
     }
 
   }
@@ -47,7 +51,7 @@ function ActivityForm({a, mode, setEditModeOff}: Props) {
     spacing={1}
     >
 
-        <Typography variant='h5'>Save Activity</Typography>
+        <Typography variant='h5'>{activity ? 'Edit Activity' : 'Create Activity'}</Typography>
 
         <TextField
         label="Title"
@@ -105,7 +109,7 @@ function ActivityForm({a, mode, setEditModeOff}: Props) {
         <Button type="submit" variant='contained'>
             Submit
         </Button>
-        {mode === 'edit' && <Button onClick={() => setEditModeOff()}>Cancel</Button>}
+        {activity && <Button component={NavLink} to={`/activities/${activity.id}`}>Cancel</Button>}
 
     </Stack>
   )

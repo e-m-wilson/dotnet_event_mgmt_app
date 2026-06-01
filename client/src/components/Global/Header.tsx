@@ -1,5 +1,6 @@
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, IconButton, List, ListItem, Toolbar, Typography } from "@mui/material"
 import { Menu } from '@mui/icons-material'
+import ListItemButtonLink from "../Activities/ListItemButtonLink"
 
 function Header(){
 
@@ -19,7 +20,17 @@ function Header(){
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Event Management App
             </Typography>
-            <Button color="inherit">Login</Button>
+            <List sx={{display: 'flex', flexDirection: 'row'}}>
+                <ListItem>
+                    <ListItemButtonLink to={`/`}>Home</ListItemButtonLink>
+                </ListItem>
+                <ListItem>
+                    <ListItemButtonLink to={`/activities`}>Activities</ListItemButtonLink>
+                </ListItem>
+                <ListItem>
+                    <ListItemButtonLink to={`/createActivity`}>Create Activity</ListItemButtonLink>
+                </ListItem>
+            </List>
             </Toolbar>
         </AppBar>
         </Box>

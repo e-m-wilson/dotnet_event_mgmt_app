@@ -1,16 +1,13 @@
-import type { Activity } from '../../types'
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { useActivities } from './useActivities';
+import { NavLink, useNavigate, useParams } from 'react-router';
 
-type Props = {
-    a: Activity;
-    handleCancel: () => void;
-    setEditModeOn: () => void;
-}
 
-function ActivityDetails({a, handleCancel, setEditModeOn} : Props) {
+function ActivityDetails() {
 
-    const {activity} = useActivities(a.id);
+    const navigate = useNavigate();
+    const {id} = useParams();
+    const {activity} = useActivities(id);
 
 
   return (
@@ -31,8 +28,8 @@ function ActivityDetails({a, handleCancel, setEditModeOn} : Props) {
             <Typography>Venue: {activity?.venue}</Typography>
         </CardContent>
         <CardActions>
-            <Button onClick={() => setEditModeOn()} color="primary">Edit</Button>
-            <Button onClick={() => handleCancel()}>Cancel</Button>
+            <Button component={NavLink} to={`/activities/manage/${id}`} color="primary">Edit</Button>
+            <Button onClick={() => navigate('/activities')}>Cancel</Button>
         </CardActions>
     </Card>
   )

@@ -1,20 +1,19 @@
-import { Grid } from '@mui/material';
-import type { Activity } from '../../types';
+import { Grid, Typography } from '@mui/material';
 import ActivityCard from './ActivityCard';
+import { useActivities } from './useActivities';
 
-type Props = {
-  activities: Activity[];
-  setSelectedActivity: (id: string) => void
-}
+function ActivitiesList() {
 
-function ActivitiesList({activities, setSelectedActivity} : Props) {
+    const {activities} = useActivities();
+
+    if(!activities) return <Typography>Activities loading...</Typography>
   
     return (
         <>
         <Grid container spacing={2}>
             {activities.map(a => {
                 return (
-                <ActivityCard key={a.id} activity={a} setSelectedActivity={setSelectedActivity}/>
+                <ActivityCard key={a.id} activity={a}/>
                 )
             })}
         </Grid>

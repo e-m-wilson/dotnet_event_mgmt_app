@@ -1,6 +1,6 @@
 import Header from './Header'
-import ActivityDashboard from '../Activities/ActivityDashboard';
 import { CssBaseline } from '@mui/material';
+import { Outlet } from 'react-router';
 
 function App() {
 
@@ -8,7 +8,7 @@ function App() {
     <>
       <CssBaseline/>
       <Header />
-      <ActivityDashboard/>
+      <Outlet/>
     </>
   )
 }
