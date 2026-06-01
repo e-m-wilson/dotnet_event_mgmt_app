@@ -21,7 +21,7 @@ namespace API.Controllers
 
      
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReadActivityDto>>> GetActivities(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<FullActivityDto>>> GetActivities(CancellationToken ct)
         {
            Logger.LogInformation("Request to get all activities"); 
            var activities = await Mediator.Send(new GetActivityList.Query(), ct);

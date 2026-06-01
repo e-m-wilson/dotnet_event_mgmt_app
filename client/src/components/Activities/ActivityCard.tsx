@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Activity } from '../../types'
 import { Button, Card, CardActions, CardContent, Chip, Typography } from '@mui/material';
+import { useActivities } from './useActivities';
 
 type Props = {
     activity: Activity;
@@ -8,6 +9,9 @@ type Props = {
 }
 
 function ActivityCard({activity, setSelectedActivity} : Props) {
+
+    const {deleteActivity} = useActivities();
+
   return (
     <Card>
         <CardContent>
@@ -17,6 +21,7 @@ function ActivityCard({activity, setSelectedActivity} : Props) {
         <CardActions>
             <Chip label={activity.category} variant='outlined'/>
             <Button onClick={() => setSelectedActivity(activity.id)}>View</Button>
+            <Button onClick={() => deleteActivity.mutateAsync(activity.id)} color='error'>Delete</Button>
         </CardActions>
     </Card>
   )

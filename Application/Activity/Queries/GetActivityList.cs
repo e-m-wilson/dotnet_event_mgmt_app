@@ -8,21 +8,21 @@ namespace Application;
 public class GetActivityList
 {
     
-    public class Query : IRequest<IEnumerable<ReadActivityDto>> {}
+    public class Query : IRequest<IEnumerable<FullActivityDto>> {}
 
     public class Handler(
         IActivityRepo repo,
         IMapper mapper
-        ) : IRequestHandler<Query, IEnumerable<ReadActivityDto>>
+        ) : IRequestHandler<Query, IEnumerable<FullActivityDto>>
     {
 
-        public async Task<IEnumerable<ReadActivityDto>> Handle(
+        public async Task<IEnumerable<FullActivityDto>> Handle(
             Query request,
             CancellationToken ct
         )
         {
             var activities = await repo.GetActivitiesAsync(ct);
-            return mapper.Map<IEnumerable<ReadActivityDto>>(activities);
+            return mapper.Map<IEnumerable<FullActivityDto>>(activities);
         }
     }
 
