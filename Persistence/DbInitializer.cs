@@ -1,14 +1,49 @@
 using System;
 using System.Security.Authentication;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence;
 
 public class DbInitializer
 {
 
-    public static async Task SeedData(AppDbContext context)
+    public static async Task SeedData(AppDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
+
+
+      var roles = new List<string>{"Admin", "User"};
+      foreach(var role in roles)
+      {
+        if(!await roleManager.RoleExistsAsync(role)){
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+      }
+
+      if(!userManager.Users.Any())
+    {
+      var users = new List<User>
+      {
+        new User{DisplayName = "Bob", UserName = "bob@test.com", Email = "bob@test.com"},
+        new User{DisplayName = "Tom", UserName = "tom@test.com", Email = "tom@test.com"},
+        new User{DisplayName = "Jane", UserName = "jane@test.com", Email = "jane@test.com"}
+      };
+
+      foreach(var user in users)
+      {
+        await userManager.CreateAsync(user, "Pa$$w0rd");
+        if(!(user.UserName == "bob@test.com"))
+        {
+          await userManager.AddToRoleAsync(user, "User");
+        } else
+        {
+          await userManager.AddToRoleAsync(user, "Admin");
+        }
+      }
+    }
+
+
+
         
         if (context.Activities.Any()) return;
 

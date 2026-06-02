@@ -11,3 +11,15 @@ export interface Activity {
     latitude: string,
     longitude: string
 }
+
+export interface LoginCreds {
+    username: string
+    password: string
+}
+
+export interface User {
+    id: string
+    email: string
+    displayName: string
+    imageUrl?: string
+}

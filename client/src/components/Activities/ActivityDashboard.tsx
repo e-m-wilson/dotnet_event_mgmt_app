@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid } from '@mui/material';
 import ActivitiesList from './ActivitiesList';
+import ActivitiesFilter from './ActivitiesFilter';
 
 function ActivityDashboard() {
 
@@ -13,7 +14,7 @@ function ActivityDashboard() {
         </Grid>
 
         <Grid size={4}>
-            placeholder
+            <ActivitiesFilter />
         </Grid>
 
     </Grid>

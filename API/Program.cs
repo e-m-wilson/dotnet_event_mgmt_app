@@ -2,12 +2,21 @@ using Application;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using AutoMapper;
+using Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -23,6 +32,12 @@ builder.Services.AddScoped<ICommentRepo, CommentRepo>();
 // builder.Services.AddScoped<IActivityMapper, ActivityMapper>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -36,6 +51,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://localhost:3000")
         .AllowAnyHeader()
+        .AllowCredentials()
         .AllowAnyMethod();
     });
 });
@@ -61,19 +77,23 @@ app.UseRouting();
 // this should come before UseAuthorization and UseAuthentication
 app.UseCors("AllowFrontend");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGroup("api").MapIdentityApi<User>();
 
 
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
 try
 {
     await context.Database.MigrateAsync(); 
-    await DbInitializer.SeedData(context);
+    await DbInitializer.SeedData(context, userManager, roleManager);
 } 
 catch (Exception e)
 {

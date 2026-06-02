@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const agent = axios.create({
-    baseURL: 'https://localhost:7189/api'
+    baseURL: 'https://localhost:7189/api',
+    withCredentials: true
 });
 
 agent.interceptors.response.use(async (response) => {

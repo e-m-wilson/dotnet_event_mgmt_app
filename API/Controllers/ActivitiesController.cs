@@ -1,5 +1,6 @@
 using Application;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,7 +20,7 @@ namespace API.Controllers
             _activityservice = service;
         }
 
-     
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FullActivityDto>>> GetActivities(CancellationToken ct)
         {
