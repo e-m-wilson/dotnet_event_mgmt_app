@@ -1,11 +1,11 @@
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "./agent";
 import type { LoginCreds, User } from "../../types";
 
 
 export const useAccount = () => {
 
-    const queryClient = new QueryClient();
+    const queryClient = useQueryClient();
 
     const loginUser = useMutation({
         mutationFn: async (creds: LoginCreds) => {
